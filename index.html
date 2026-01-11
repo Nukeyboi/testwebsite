@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Holographic.lol | Gorilla Tag Mod Menu</title>
+<style>
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  background: radial-gradient(circle at center, #02010a 0%, #000 100%);
+  color: #fff;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* HEADER */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background: rgba(10, 10, 20, 0.4);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  z-index: 1000;
+}
+header h1 {
+  font-size: 1.7em;
+  background: linear-gradient(90deg, #00eaff, #ff00ff);
+  -webkit-background-clip: text;
+  color: transparent;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+nav a {
+  text-decoration: none;
+  color: #ddd;
+  margin-left: 30px;
+  font-size: 1.05em;
+  position: relative;
+  transition: 0.3s;
+}
+nav a:hover {
+  color: #fff;
+}
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, #00f0ff, #ff00ff);
+  transition: 0.3s;
+}
+nav a:hover::after {
+  width: 100%;
+}
+
+/* HOLOGRAPHIC CURSOR GLOW */
+.holo-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.4), rgba(255, 0, 255, 0.25), transparent 70%);
+  pointer-events: none;
+  filter: blur(100px);
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  transition: transform 0.05s linear;
+  z-index: 10;
+}
+
+/* BACKGROUND DECORATION GRID */
+.grid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  z-index: 1;
+  animation: moveGrid 20s linear infinite;
+}
+@keyframes moveGrid {
+  from {
+    background-position: 0 0, 0 0;
+  }
+  to {
+    background-position: 60px 60px, 60px 60px;
+  }
+}
+
+/* PARTICLES */
+.particle {
+  position: absolute;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.7), rgba(255, 0, 255, 0.7));
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: float 10s infinite ease-in-out;
+}
+@keyframes float {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-120px) scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+}
+
+/* MOVING TECH LINES */
+.tech-line {
+  position: absolute;
+  width: 2px;
+  height: 100px;
+  background: linear-gradient(to bottom, #00f0ff55, #ff00ff00);
+  animation: drift 8s linear infinite;
+  opacity: 0.4;
+  z-index: 0;
+}
+@keyframes drift {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* SECTION BASE */
+section {
+  position: relative;
+  z-index: 5;
+  min-height: 100vh;
+  padding: 180px 10% 120px;
+  overflow: hidden;
+}
+h2 {
+  font-size: 2.8em;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #00f0ff, #ff00ff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+p {
+  color: #ccc;
+  line-height: 1.8em;
+  font-size: 1.1em;
+  max-width: 900px;
+}
+
+/* CARDS */
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  padding: 30px;
+  margin-top: 40px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.05);
+  position: relative;
+  transition: 0.4s;
+  overflow: hidden;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 180deg, #00f0ff, #ff00ff, #00f0ff);
+  animation: spin 10s linear infinite;
+  opacity: 0.1;
+}
+.card > * {
+  position: relative;
+  z-index: 1;
+}
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* HOLO FRAMES */
+.holo-frame {
+  position: absolute;
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 10px;
+  animation: pulse 6s infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+@keyframes pulse {
+  0% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+/* BUTTON */
+.btn {
+  background: linear-gradient(90deg, #00f0ff, #ff00ff);
+  border: none;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-size: 1em;
+  color: white;
+  margin-top: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+}
+
+/* FADE-IN ANIMATION */
+.fade-in {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 40px;
+  font-size: 0.9em;
+  color: #888;
+  background: rgba(10, 10, 20, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+</style>
+</head>
+<body>
+
+<div class="grid-overlay"></div>
+<div class="holo-glow"></div>
+
+<header>
+  <h1>Holographic.lol</h1>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#get">Get</a>
+    <a href="#use">Use</a>
+    <a href="#team">Team</a>
+  </nav>
+</header>
+
+<section id="about">
+  <div class="fade-in">
+    <h2>About the Menu</h2>
+    <div class="card">
+      <p>Holographic.lol is an advanced, visually immersive Gorilla Tag mod menu. Every detail responds dynamically to motion, creating a holographic illusion that feels tactile, vibrant, and alive. With sleek gradients and reactive visuals, it brings a new dimension to your modding experience.</p>
+    </div>
+  </div>
+</section>
+
+<section id="get">
+  <div class="fade-in">
+    <h2>How to Get the Menu</h2>
+    <div class="card">
+      <p>To get Holographic.lol, follow our official installer. Every element—from setup to launch—features glowing animations and guided visuals designed for clarity and flow. The result: a seamless holographic setup process.</p>
+      <button class="btn">Get the Menu</button>
+    </div>
+  </div>
+</section>
+
+<section id="use">
+  <div class="fade-in">
+    <h2>How to Use</h2>
+    <div class="card">
+      <p>Activate Holographic.lol in-game and explore interactive panels that shimmer and respond to your gestures. It’s not just a menu—it’s a living interface, making every interaction smooth and strikingly futuristic.</p>
+    </div>
+  </div>
+</section>
+
+<section id="team">
+  <div class="fade-in">
+    <h2>Our Developer Team</h2>
+    <div class="card">
+      <p>Our team of visionaries and engineers combines art, physics, and technology to create something beyond the ordinary. We build experiences that glow, move, and evolve—just like our players.</p>
+    </div>
+  </div>
+</section>
+
+<footer>© 2025 Holographic.lol — Designed in neon perfection.</footer>
+
+<script>
+// Glow follows cursor
+const glow = document.querySelector(".holo-glow");
+document.addEventListener("mousemove", (e) => {
+  glow.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+});
+
+// Fade-in on scroll
+const faders = document.querySelectorAll(".fade-in");
+const appearOptions = { threshold: 0.2 };
+const appearOnScroll = new IntersectionObserver((entries, observer) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add("visible");
+    observer.unobserve(entry.target);
+  });
+}, appearOptions);
+faders.forEach((f) => appearOnScroll.observe(f));
+
+// Random floating particles
+for (let i = 0; i < 60; i++) {
+  const p = document.createElement("div");
+  p.classList.add("particle");
+  p.style.top = Math.random() * 100 + "vh";
+  p.style.left = Math.random() * 100 + "vw";
+  p.style.animationDelay = Math.random() * 10 + "s";
+  p.style.animationDuration = 8 + Math.random() * 10 + "s";
+  document.body.appendChild(p);
+}
+
+// Random vertical tech lines
+for (let i = 0; i < 20; i++) {
+  const line = document.createElement("div");
+  line.classList.add("tech-line");
+  line.style.left = Math.random() * 100 + "vw";
+  line.style.height = 50 + Math.random() * 150 + "px";
+  line.style.animationDuration = 6 + Math.random() * 6 + "s";
+  line.style.animationDelay = Math.random() * 5 + "s";
+  document.body.appendChild(line);
+}
+
+// Random holo frames (decor boxes)
+for (let i = 0; i < 8; i++) {
+  const frame = document.createElement("div");
+  frame.classList.add("holo-frame");
+  frame.style.width = 150 + Math.random() * 300 + "px";
+  frame.style.height = 100 + Math.random() * 250 + "px";
+  frame.style.top = Math.random() * 90 + "vh";
+  frame.style.left = Math.random() * 90 + "vw";
+  frame.style.animationDelay = Math.random() * 5 + "s";
+  document.body.appendChild(frame);
+}
+</script>
+</body>
+</html>
